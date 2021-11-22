@@ -9,6 +9,7 @@ export default function createRequest(req: IncomingMessage) {
 
     return {
         url,
-        query,method: req.method
+        query,
+        method: req.method
     }
 }

@@ -21,12 +21,6 @@ export const formParams = (str: string): [string, string][] =>
     .filter(arr => arr[1] !== "")
     .map(arr => [arr[0], arr[1]]);
 
-// const buildParamsObject = (params: [string, unknown][]) => 
-//     params.reduce((acc, param) => ({
-//         ...acc,
-//         [param[0]]: param[1]
-//     }), {});
-
 export const buildParamsObject = (params: [string, unknown][]) => 
     reduceToObj(params, el => el[0], el => el[1])
 
