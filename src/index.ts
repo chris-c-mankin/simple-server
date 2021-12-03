@@ -9,29 +9,25 @@ const PORT = process.env.PORT || 5000;
 export type Route = {[key: string]: (req: Request, res: Response) => void}
 export type Routes = {
     get: Route;
+    post: Route;
+}
+
+type RouterMethod = (url: string, fn: (req: Request, res: Response) => void) => void;
+type Router = {
+    [key in 'get' | 'post']: RouterMethod;
 }
 
 export default function createRouter() {
 
     const routes: Routes = {
-        get: {}
+        get: {},
+        post: {}
     };
-
-    /* function handler(req: IncomingMessage, res: Response) {
-
-        console.log(`${req.headers.host}${req.url}`)
-
-        const handler = createHandler(req,res);
-    
-        switch(req.method) {
-            case 'GET': handler(routes.get)
-        }
-    } */
 
     const server = http.createServer(async (req,res) => {
 
         const response = createResponse(res);
-        const request = createRequest(req);
+        const request = await createRequest(req);
     
         handler(request,response,routes);
     })
@@ -40,9 +36,12 @@ export default function createRouter() {
         console.log(`Server running on port: ${PORT}`)
     })
 
-    const router = {
-        get(url: string, fn: (req: Request, res: Response) => void) {
+    const router: Router = {
+        get(url, fn) {
             routes.get[url] = fn;
+        },
+        post(url, fn) {
+            routes.post[url] = fn;
         }
     };
 
@@ -65,3 +64,9 @@ router.get('/api/data', (req,res) => {
     res.send({data: [1,2,3]})
 })
  
+router.post('/api/data', (req, res) => {
+
+    console.log(req)
+
+    console.log(req.body)
+})

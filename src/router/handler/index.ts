@@ -25,5 +25,6 @@ export default function handler(req: Request, res: Response, routes: Routes) {
 
     switch(req.method) {
         case 'GET': handleRoute(routes.get)
+        case 'POST': handleRoute(routes.post)
     }
 }
